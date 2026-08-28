@@ -20,7 +20,7 @@
     "src",
     "cordis.patch.yml",
     "README.md",
-    "README.zh-CN.md",
+    "README.en.md",
     "Agent.md",
     "LICENSE"
   ],
@@ -47,7 +47,7 @@
     "visual"
   ],
   "license": "MIT",
-  "author": "JetEcho",
+  "author": "jetecho",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/jetecho/dsh-csv-and-image-preview.git"

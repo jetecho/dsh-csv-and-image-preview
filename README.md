@@ -1,71 +1,73 @@
 # dsh-csv-and-image-preview
 
-Render images and SVG **for real** in the DeepSeek Harness (dsh) chat — and prepare CSV review — displayed as a native browser `<img>`, bypassing the chat renderer's markdown / genui image filter, and paired with a **preview-first workflow**: generate or modify an image, render it to you first, and only apply the real change once you confirm.
+[English](README.en.md) | 中文
 
-## Install
+在 DeepSeek Harness (dsh) 聊天里**真正把图片 / SVG 显示出来**的插件——并支持 CSV 数据先行预览。它把图片以浏览器原生 `<img>` 渲染，绕过聊天渲染器对 markdown / genui 图片的过滤；同时内置**预览式工作流**：生成或修改图片或 CSV 时，先把结果渲染给你看，等你确认后再落地真正的改动。
 
-Standard Profile Bundle install (recommended):
+## 安装
+
+标准 Profile Bundle 安装（推荐）：
 
 ```sh
 dsh plugin --profile web add dsh-csv-and-image-preview
 ```
 
-Or install the development copy from a local directory:
+或从本地目录安装开发版：
 
 ```sh
 dsh plugin --profile web add ../dsh-csv-and-image-preview
 ```
 
-After installing, restart `dsh web` so the new bundle joins the runtime. Legacy fallback for older versions: copy the package into the profile's `node_modules` and insert the `- insert: [...]` row in `cordis.patch.yml` — keep this for old-version compatibility only.
+安装后需重启 `dsh web` 让新 bundle 进入运行时。更早版本兼容做法是手动把包复制进 profile 的 `node_modules` 并在 `cordis.patch.yml` 插入 `- insert: [...]`，仅作旧版本兜底。
 
-## What it does
+## 它做什么
 
-1. **Real image rendering.** The host registers a `preview_image` tool: it reads a file path (or inline SVG), infers the MIME, base64-encodes it into a data-URI, and projects it through the tool result's `presentationMeta`. The browser-side keyed toolview (`tool.call.toolview`, key `preview_image`) reads that meta and renders a native `<img>`. The image bytes travel only through meta into the browser — **never into the model context**.
-2. **Preview-first workflow.** After calling `preview_image`, the agent receives a compact summary (SVG/bitmap, dimensions, byte count) while the actual image is shown in chat; the agent then **waits for your confirmation** before writing files or applying changes.
-3. **Preview any resource.** Pass a local path to preview the matching image file, or pass inline SVG text to render without writing to disk.
+1. **真渲染图片**。宿主注册 `preview_image` 工具：读取文件路径（或内联 SVG），推断 MIME、base64 编码成 data-URI，通过工具结果的 `presentationMeta` 投递；浏览器端键控 toolview（`tool.call.toolview` key=`preview_image`）读取 meta 并渲染原生 `<img>`。图片字节只走 meta 进浏览器，**不进入模型上下文**。
+2. **预览式工作流**。调用 `preview_image` 后，脚本拿到的是紧凑摘要（SVG/位图、尺寸、字节数），真正的画面直接显示在聊天里；脚本会「等待用户确认」，等你点头后才写入文件/执行改动。
+3. **预览任意资源**。给一个本地路径即可预览对应图片文件；也能传入内联 SVG 文本直接渲染，无需落盘。
 
-## Usage examples
-
-```markdown
-<!-- Preview a file on disk -->
-I'll show you the preview first.
-[call preview_image path=E:\DSHConfig\logo-a.svg label=ALPHA]
-```
+## 用法示例
 
 ```markdown
-<!-- Preview inline SVG (not yet on disk) -->
-[call preview_image content=<svg ...> mime=image/svg+xml label=sketch]
+<!-- 预览磁盘上的 logo -->
+我先给你看预览。
+[调用 preview_image path=E:\DSHConfig\logo-a.svg label=ALPHA]
 ```
 
-The agent sees something like `已渲染预览「ALPHA」:SVG 矢量图(1.3 KB).` while the picture appears in the tool card.
-
-## Convention: preview first
-
-This plugin treats "preview, then apply" as the default behavior:
-
-- When generating / modifying an SVG or image, **preview it first** with `preview_image`; do not write the real file yet.
-- Only after the user confirms (`确认` / `可以` / `就这样`) do you actually write / mutate.
-- If the user rejects it, redo per feedback and preview again.
-- To preview any resource, pass `path` directly.
-
-To enforce this convention, pair it with the bundled agent preset (see `Agent.md`), which writes these rules into the session persona.
-
-## Layout
-
-```
-lib/index.js   host: registers the preview_image tool; reads files and projects data-URIs
-lib/client.js  browser bundle: registers the keyed toolview; renders a native <img>
-cordis.patch.yml  profile insert line
+```markdown
+<!-- 预览内联 SVG（未落盘） -->
+[调用 preview_image content=<svg ...> mime=image/svg+xml label=草图]
 ```
 
-## Development
+脚本会读到类似 `已渲染预览「ALPHA」:SVG 矢量图(1.3 KB)。` 的返回，图片则显示在工具卡片里。
+
+## 约定：预览优先
+
+本插件把「先预览、后落地」作为默认约定：
+
+- 生成 / 修改 SVG、图片或 CSV 时，**先** `preview_image` 渲染，不做真实写入；
+- 用户确认（`确认` / `可以` / `就这样`）后，才真正写文件 / 执行改动；
+- 用户否决时，按反馈重做并再次预览；
+- 需要预览任意资源时，直接传 `path`。
+
+要强制遵守这一约定，可以配合附带的 agent preset（见 `Agent.md`），它会把这套规则写进会话 persona。
+
+## 组成部分
+
+```
+lib/index.js   宿主：注册 preview_image 工具，读取文件并投递 data-URI
+lib/client.js  浏览器 bundle：注册键控 toolview，渲染原生 <img>
+cordis.patch.yml  profile 插入行
+```
+
+## 开发
 
 ```sh
 pnpm install
-pnpm build       # no-op: lib/ ships prebuilt, no transpile
-pnpm prepack     # verify the packed tarball contains lib/
+pnpm build       # no-op：lib/ 为成品，无需转译
+pnpm prepack     # 校验打包内容含 lib/
 ```
 
 ## License
 
-MIT © [JetEcho](./LICENSE). See [LICENSE](./LICENSE).
+MIT © [jetecho](./LICENSE)，详见 [LICENSE](./LICENSE)。

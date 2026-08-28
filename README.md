@@ -9,7 +9,7 @@
 标准 Profile Bundle 安装（推荐）：
 
 ```sh
-dsh plugin --profile web add dsh-csv-and-image-preview
+dsh plugin --profile web add @jetecho/dsh-csv-and-image-preview
 ```
 
 或从本地目录安装开发版：

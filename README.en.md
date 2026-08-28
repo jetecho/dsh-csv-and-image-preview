@@ -9,7 +9,7 @@ Render images and SVG **for real** in the DeepSeek Harness (dsh) chat — and pr
 Standard Profile Bundle install (recommended):
 
 ```sh
-dsh plugin --profile web add dsh-csv-and-image-preview
+dsh plugin --profile web add @jetecho/dsh-csv-and-image-preview
 ```
 
 Or install the development copy from a local directory:

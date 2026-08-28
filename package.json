@@ -1,5 +1,5 @@
 {
-  "name": "dsh-csv-and-image-preview",
+  "name": "@jetecho/dsh-csv-and-image-preview",
   "version": "0.1.0",
   "description": "Preview images / SVG (and prepare CSV) in the DeepSeek Harness chat, rendered as real browser <img> elements. Preview-first workflow: show the user the asset, wait for approval, then apply the real change.",
   "type": "module",
@@ -17,7 +17,6 @@
   },
   "files": [
     "lib",
-    "src",
     "cordis.patch.yml",
     "README.md",
     "README.en.md",
@@ -48,6 +47,9 @@
   ],
   "license": "MIT",
   "author": "jetecho",
+  "publishConfig": {
+    "access": "public"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/jetecho/dsh-csv-and-image-preview.git"

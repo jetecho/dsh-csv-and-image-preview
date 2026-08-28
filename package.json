@@ -1,0 +1,63 @@
+{
+  "name": "dsh-csv-and-image-preview",
+  "version": "0.1.0",
+  "description": "Preview images / SVG (and prepare CSV) in the DeepSeek Harness chat, rendered as real browser <img> elements. Preview-first workflow: show the user the asset, wait for approval, then apply the real change.",
+  "type": "module",
+  "main": "lib/index.js",
+  "types": "lib/types/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/types/index.d.ts",
+      "default": "./lib/index.js"
+    },
+    "./client": {
+      "default": "./lib/client.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "lib",
+    "src",
+    "cordis.patch.yml",
+    "README.md",
+    "README.zh-CN.md",
+    "Agent.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "prepack": "node scripts/prepack.mjs"
+  },
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    },
+    "client": {
+      "inject": [],
+      "platform": "web"
+    }
+  },
+  "keywords": [
+    "dsh",
+    "deepseek-harness",
+    "dsh-plugin",
+    "image",
+    "svg",
+    "preview",
+    "visual"
+  ],
+  "license": "MIT",
+  "author": "JetEcho",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jetecho/dsh-csv-and-image-preview.git"
+  },
+  "homepage": "https://github.com/jetecho/dsh-csv-and-image-preview#readme",
+  "peerDependencies": {
+    "@deepseek-ai/cordis": "^4.0.1",
+    "react": "^18.0.0 || ^19.0.0"
+  },
+  "dependencies": {
+    "react": "^18.3.1"
+  }
+}

@@ -15,6 +15,17 @@ export interface PreviewToolDefinition {
   presentResult(args: unknown): { card: string; title: string } | undefined
 }
 
+/** The `preview_csv` tool definition (a dsh ToolDefinition object). */
+export interface CsvToolDefinition {
+  name: 'preview_csv'
+  description: string
+  parameters: Record<string, unknown>
+  output: Record<string, unknown>
+  execute(args: unknown): Promise<string>
+  presentCall(args: unknown): { card: string; title: string; kind: string } | undefined
+  presentResult(args: unknown): { card: string; title: string } | undefined
+}
+
 /** Cordis plugin exported by the host half (lib/index.js). */
 export interface ImagePreviewPlugin {
   readonly name: 'csv-and-image-preview'
@@ -26,6 +37,17 @@ export interface PreviewMeta {
   src: string
   mime: string
   label: string
+}
+
+/** A keyed bounded table payload carried on tool result meta (rows[0] = header). */
+export interface CsvPreviewMeta {
+  label: string
+  delimiter: string
+  rows: string[][]
+  totalRows: number
+  totalCols: number
+  rowsShown: number
+  colsShown: number
 }
 
 declare const plugin: ImagePreviewPlugin

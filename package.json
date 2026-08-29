@@ -1,7 +1,7 @@
 {
   "name": "@jetecho/dsh-csv-and-image-preview",
-  "version": "0.1.0",
-  "description": "Preview images / SVG (and prepare CSV) in the DeepSeek Harness chat, rendered as real browser <img> elements. Preview-first workflow: show the user the asset, wait for approval, then apply the real change.",
+  "version": "0.2.0",
+  "description": "Preview images / SVG and CSV tables in the DeepSeek Harness chat, rendered as real browser <img> / <table> elements. Preview-first workflow: show the user the asset, wait for approval, then apply the real change.",
   "type": "module",
   "main": "lib/index.js",
   "types": "lib/types/index.d.ts",
@@ -42,6 +42,8 @@
     "dsh-plugin",
     "image",
     "svg",
+    "csv",
+    "table",
     "preview",
     "visual"
   ],

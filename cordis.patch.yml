@@ -3,4 +3,4 @@
 # `dsh plugin --profile web add <path>` installed this package.
 - insert:
     - id: csv-and-image-preview
-      name: dsh-csv-and-image-preview
+      name: '@jetecho/dsh-csv-and-image-preview'
